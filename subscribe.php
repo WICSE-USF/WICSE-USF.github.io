@@ -42,7 +42,7 @@ if($_POST) {
         use Mailgun\Mailgun;
 
         # Instantiate the client.
-        $mgClient = new Mailgun('key-8bcb9c094ade3ed99940ec67d6e6260c');
+        $mgClient = new Mailgun('*************');
         $domain = "www.codersfactory.in";
 
         # Make the call to the client.
