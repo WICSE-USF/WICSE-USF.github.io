@@ -1,4 +1,6 @@
 <?php
+require 'vendor/autoload.php';
+        use Mailgun\Mailgun;
 
 
 // Email address verification
@@ -24,15 +26,15 @@ if($_POST) {
         header("location:./");
     }
     else{
-        
+        $mgClient = new Mailgun('*****************');
+        $domain = "www.wicseatusf.com";
 
-        // Send an email
-        $subject = 'Feedback';
-        $body = "".$feedback_message."\nFrom:\n".$feedback_name."\nEmail: " . $feedback_email;
-        // uncomment this to set the From and Reply-To emails, then pass the $headers variable to the "mail" function below
-        $headers = "From: ".$feedback_email."<" . $feedback_email . ">" . "\r\n" .
-        "Reply-To: " . $feedback_email ."\r\n". 'X-Mailer: PHP/' . phpversion();
-        mail($emailTo, $subject, $body, $headers);
+        $result = $mgClient->sendMessage($domain, array(
+        'from'    => 'Admin <admin@wicseatusf.com>',
+        'to'      => 'info <info@wicseatusf.com>',
+        'subject' => 'Hello',
+        'text'    => "We got some feed from\nName:".$feedback_name."\nEmail-id:".$feedback_email.
+        "\nMessage:".$feedback_message.""));
         // $array = array();
         //     $array['valid'] = 1;
         //     $array['message'] = 'Thanks for your subscription!';

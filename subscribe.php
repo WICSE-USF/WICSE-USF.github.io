@@ -1,5 +1,6 @@
 <?php
-
+require 'vendor/autoload.php';
+        use Mailgun\Mailgun;
 
 // Email address verification
 
@@ -10,47 +11,38 @@ function isEmail($email) {
 if($_POST) {
 
     // Enter the email where you want to receive the notification when someone subscribes
-    $emailTo = 'abhinay302@gmail.com';
+    // $emailTo = 'admin@wicseatusf.com'; //Email-id of Admin of WICSE@USF
 
     $subscriber_email = ($_POST['email']);
 
     if(!isEmail($subscriber_email)) {
-        // $array = array();
-        // $array['valid'] = 0;
-        // $array['message'] = 'Insert a valid email address!';
-        // echo json_encode($array);
         header("location:./");
     }
     else{
+        // /////////////////////////////////////////////////////////////////////
+        // This message will go the Subscriber & Admin of WICSE as a response //
+        // ////////////////////////////////////////////////////////////////////
         
 
-        // Send an email
-        $subject = 'New Subscriber!';
-        $body = "You have a new subscriber!\n\nEmail: " . $subscriber_email;
-        // uncomment this to set the From and Reply-To emails, then pass the $headers variable to the "mail" function below
-        $headers = "From: ".$subscriber_email."<" . $subscriber_email . ">" . "\r\n" .
-        "Reply-To: " . $subscriber_email ."\r\n". 'X-Mailer: PHP/' . phpversion();
-        mail($emailTo, $subject, $body, $headers);
-        // $array = array();
-        //     $array['valid'] = 1;
-        //     $array['message'] = 'Thanks for your subscription!';
-        //     echo json_encode($array);
-        // ///////////////////////////////////////////////////
-        // This message will go the subscriber as a response
-        // //////////////////////////////////////////////////
-        require 'vendor/autoload.php';
-        use Mailgun\Mailgun;
+        // Instantiate the client.
+        $mgClient = new Mailgun('*****************');
+        $domain = "www.wicseatusf.com";
 
-        # Instantiate the client.
-        $mgClient = new Mailgun('*************');
-        $domain = "www.codersfactory.in";
-
-        # Make the call to the client.
+        // send info mail to WICSE@USF from ADMIN.
         $result = $mgClient->sendMessage($domain, array(
-        'from'    => 'abhinay <abhinay@codersfactory.in>',
-        'to'      => "abhinay <".$subscriber_email.">",
+        'from'    => 'Admin <admin@wicseatusf.com>',
+        'to'      => 'Info <info@wicseatusf.com>',
         'subject' => 'Hello',
-        'text'    => 'Thanks for subscribesing!!'));
+        'text'    => "You got one subscribeer\n with Email-id:".$subscriber_email.""));
+
+        // Send mail to Subscriber
+        $result = $mgClient->sendMessage($domain, array(
+        'from'    => 'Admin <admin@wicseatusf.com>',
+        'to'      => "Info <".$subscriber_email.">",
+        'subject' => 'Hello',
+        'text'    => "You are Subscribed to our Newsletter \n Thank You!!"));
+
+
         header("location:./");
     }
 
